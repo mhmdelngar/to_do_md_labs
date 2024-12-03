@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:to_do/business/helpers/base_controller.dart';
@@ -34,8 +33,12 @@ class HomeController extends BaseGetxController {
   }
 
   Future<void> addTask(String title) async {
-    final Task newTask = await _taskRepository.addTask(title);
-    tasks.add(newTask);
+    try {
+      final Task newTask = await _taskRepository.addTask(title);
+      tasks.add(newTask);
+    } catch (e) {
+      handleError(e);
+    }
   }
 
   Future<void> toggleTaskCompletion(String id) async {
@@ -47,6 +50,7 @@ class HomeController extends BaseGetxController {
       try {
         await _taskRepository.updateTask(updatedTask);
       } catch (e) {
+        handleError(e);
         updatedTask.isCompleted = !updatedTask.isCompleted;
         tasks[index] = updatedTask;
       }
@@ -54,12 +58,22 @@ class HomeController extends BaseGetxController {
   }
 
   Future<void> deleteTask(String id) async {
-    await _taskRepository.deleteTask(id);
-    tasks.removeWhere((task) => task.id == id);
+    try {
+      await _taskRepository.deleteTask(id);
+      tasks.removeWhere((task) => task.id == id);
+    }catch (e) {
+      handleError(e);
+    }
+
   }
 
   Future<void> clearAllTasks() async {
-    await _taskRepository.clearAllTasks();
-    tasks.clear();
+    try {
+      await _taskRepository.clearAllTasks();
+      tasks.clear();
+    }catch (e) {
+      handleError(e);
+    }
+
   }
 }

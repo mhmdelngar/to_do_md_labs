@@ -49,7 +49,9 @@ void main() {
   test('should toggle task completion status', () async {
     // Arrange
     when(() => mockTaskRepository.getTasks()).thenReturn([task]);
-    when(() => mockTaskRepository.updateTask(any())).thenAnswer((_) async {});
+    when(() => mockTaskRepository.updateTask(any())).thenAnswer((_) async {
+      task.isCompleted = !task.isCompleted;
+    });
 
     // Act
      taskController.loadTasks(); // Load tasks into the controller
